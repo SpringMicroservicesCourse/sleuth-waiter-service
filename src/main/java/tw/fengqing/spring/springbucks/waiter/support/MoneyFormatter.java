@@ -6,6 +6,7 @@ import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
+import org.springframework.lang.NonNull;
 
 import java.text.ParseException;
 import java.util.Locale;
@@ -17,7 +18,8 @@ public class MoneyFormatter implements Formatter<Money> {
      * 校驗不太嚴密，僅作演示
      */
     @Override
-    public Money parse(String text, Locale locale) throws ParseException {
+    @NonNull
+    public Money parse(@NonNull String text, @NonNull Locale locale) throws ParseException {
         if (NumberUtils.isParsable(text)) {
             return Money.of(CurrencyUnit.of("TWD"), NumberUtils.createBigDecimal(text));
         } else if (StringUtils.isNotEmpty(text)) {
@@ -33,10 +35,8 @@ public class MoneyFormatter implements Formatter<Money> {
     }
 
     @Override
-    public String print(Money money, Locale locale) {
-        if (money == null) {
-            return null;
-        }
+    @NonNull
+    public String print(@NonNull Money money, @NonNull Locale locale) {
         return money.getCurrencyUnit().getCode() + " " + money.getAmount();
     }
 }
